@@ -126,7 +126,8 @@ const Register = () => {
         }, 2000);
       } else {
         setErrors({
-          general: data.message || "Error al registrar usuario",
+          general:
+            data.errors?.[0]?.message || data.message || "Error desconocido",
         });
       }
     } catch (error) {
@@ -251,11 +252,7 @@ const Register = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
                 tabIndex={-1}
               >
-                {showPassword ? (
-                  <FiEyeOff size={20} />
-                ) : (
-                  <FiEye size={20} />
-                )}
+                {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
               </button>
             </div>
 
@@ -281,17 +278,13 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="Repite tu contraseña"
                 className={`w-full p-3 pr-12 rounded-xl bg-white/10 border ${
-                  errors.confirmPassword
-                    ? "border-red-500"
-                    : "border-white/10"
+                  errors.confirmPassword ? "border-red-500" : "border-white/10"
                 } text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all`}
               />
 
               <button
                 type="button"
-                onClick={() =>
-                  setShowConfirmPassword(!showConfirmPassword)
-                }
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
                 tabIndex={-1}
               >

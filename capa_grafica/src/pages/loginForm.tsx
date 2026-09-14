@@ -43,7 +43,9 @@ const LoginForm = () => {
           window.location.href = "/home";
         }
       } else {
-        setError(data.message || "Credenciales inválidas");
+        setError(
+          data.errors?.[0]?.message || data.message || "Error desconocido",
+        );
       }
     } catch (err) {
       console.error("❌ Error de red:", err);
@@ -125,11 +127,7 @@ const LoginForm = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
                 tabIndex={-1}
               >
-                {showPassword ? (
-                  <FiEyeOff size={20} />
-                ) : (
-                  <FiEye size={20} />
-                )}
+                {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
               </button>
             </div>
           </div>
