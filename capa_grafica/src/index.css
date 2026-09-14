@@ -1,19 +1,13 @@
-/* stylelint-disable at-rule-no-unknown */
-@tailwind base;
-@tailwind components;
-/* stylelint-disable-next-line at-rule-no-unknown */
-@tailwind utilities;
-/* stylelint-enable at-rule-no-unknown */
+@import "tailwindcss";
 
 :root {
-  --bg: #000;   /* fondo negro */
-  --text: #f3f4f6;   /* texto gris claro para contraste */
-  --text-h: #ffffff; /* títulos en blanco */
-  /* mantené el resto de variables como quieras */
+  --bg: #000;
+  --text: #f3f4f6;
+  --text-h: #ffffff;
 }
 
 body {
   margin: 0;
-  background-color: var(--bg); 
-  color: var(--text);          
+  background-color: var(--bg);
+  color: var(--text);
 }
