@@ -13,7 +13,7 @@ function App() {
       <Route path="/login" element={<LoginForm />} />
       <Route path="/register" element={<RegisterForm />} />
       <Route element={<ProtectedRoute />}>
-        <Route path="/home" element={<Home />} />
+        <Route path="/home/*" element={<Home />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

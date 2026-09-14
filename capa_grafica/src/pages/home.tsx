@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FiHome, FiClock, FiSettings, FiMenu, FiX } from "react-icons/fi";
-
 import Resume from "../components/resume";
 import ReciveComponent from "../components/recive_component";
 import HistoryComponent from "../components/history_component";
@@ -27,15 +26,42 @@ interface Wallet {
 
 const Home = () => {
   const navigate = useNavigate();
+  const params = useParams();
   const token = localStorage.getItem("token");
 
-  const [activeTab, setActiveTab] = useState<Tab>("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [balances, setBalances] = useState<
     Record<string, { xrp: number; rlusd: number }>
   >({});
   const [loading, setLoading] = useState(true);
+
+  const section = (params["*"] || "").split("/")[0];
+
+  const getTabFromSection = (s: string): Tab => {
+    if (s === "history") return "history";
+    if (s === "settings") return "settings";
+    if (s === "receive") return "receive";
+    if (s === "send") return "send";
+    return "dashboard";
+  };
+
+  const activeTab = getTabFromSection(section);
+
+  const getPathFromTab = (tab: Tab): string => {
+    switch (tab) {
+      case "history":
+        return "/home/history";
+      case "settings":
+        return "/home/settings";
+      case "receive":
+        return "/home/receive";
+      case "send":
+        return "/home/send";
+      default:
+        return "/home";
+    }
+  };
 
   if (!token) {
     navigate("/");
@@ -62,20 +88,13 @@ const Home = () => {
         const rlusdData = await rlusdRes.json();
         const rlusd = Number(rlusdData.balance) || 0;
 
-        newBalances[wallet.address] = {
-          xrp,
-          rlusd,
-        };
+        newBalances[wallet.address] = { xrp, rlusd };
       } catch (error) {
         console.error(
           `Error al obtener balance para ${wallet.address}:`,
           error,
         );
-
-        newBalances[wallet.address] = {
-          xrp: 0,
-          rlusd: 0,
-        };
+        newBalances[wallet.address] = { xrp: 0, rlusd: 0 };
       }
     }
 
@@ -140,7 +159,6 @@ const Home = () => {
       }
 
       await fetchWallets();
-
       return true;
     } catch (error) {
       console.error("Error de red al agregar wallet:", error);
@@ -173,9 +191,7 @@ const Home = () => {
 
       if (response.ok && data.success) {
         await fetchWallets();
-        return {
-          success: true,
-        };
+        return { success: true };
       }
 
       return {
@@ -185,7 +201,6 @@ const Home = () => {
       };
     } catch (error) {
       console.error("Error de red al crear trust line:", error);
-
       return {
         success: false,
         message: "Error de conexión con el servidor",
@@ -270,21 +285,9 @@ const Home = () => {
   const balance = firstWallet ? balances[firstWallet.address]?.xrp || 0 : 0;
 
   const menuItems = [
-    {
-      id: "dashboard",
-      label: "Resumen",
-      icon: FiHome,
-    },
-    {
-      id: "history",
-      label: "Historial",
-      icon: FiClock,
-    },
-    {
-      id: "settings",
-      label: "Ajustes",
-      icon: FiSettings,
-    },
+    { id: "dashboard", label: "Resumen", icon: FiHome },
+    { id: "history", label: "Historial", icon: FiClock },
+    { id: "settings", label: "Ajustes", icon: FiSettings },
   ];
 
   const renderContent = () => {
@@ -326,14 +329,16 @@ const Home = () => {
         menuItems={menuItems}
         activeTab={activeTab}
         setActiveTab={(tab: string) => {
-          if (
-            tab === "dashboard" ||
-            tab === "send" ||
-            tab === "receive" ||
-            tab === "history" ||
-            tab === "settings"
-          ) {
-            setActiveTab(tab as Tab);
+          const validTabs = [
+            "dashboard",
+            "send",
+            "receive",
+            "history",
+            "settings",
+          ];
+          if (validTabs.includes(tab)) {
+            // 👇 Navega a la URL del tab
+            navigate(getPathFromTab(tab as Tab));
           }
         }}
         address={address}
