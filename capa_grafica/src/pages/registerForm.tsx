@@ -111,9 +111,10 @@ const Register = () => {
 
       if (response.ok) {
         setSuccessMessage(
-          "Cuenta creada exitosamente. Redirigiendo al login...",
+          "Cuenta creada exitosamente",
         );
-
+        localStorage.setItem("token", data.data.token);
+        localStorage.setItem("user", JSON.stringify(data.data.user));
         setFormData({
           username: "",
           email: "",
@@ -122,7 +123,7 @@ const Register = () => {
         });
 
         setTimeout(() => {
-          navigate("/login");
+          navigate("/home");
         }, 2000);
       } else {
         setErrors({

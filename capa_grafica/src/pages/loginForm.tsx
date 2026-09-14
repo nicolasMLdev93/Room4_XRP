@@ -37,7 +37,6 @@ const LoginForm = () => {
 
         try {
           navigate("/home", { replace: true });
-          console.log("✅ Redirección con navigate ejecutada");
         } catch (navError) {
           console.warn("⚠️ Falló navigate, usando fallback:", navError);
           window.location.href = "/home";
