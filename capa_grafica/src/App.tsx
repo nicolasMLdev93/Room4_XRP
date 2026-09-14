@@ -4,6 +4,7 @@ import Home from "./pages/home";
 import ProtectedRoute from "./components/protected_route";
 import LoginForm from "./pages/loginForm";
 import RegisterForm from "./pages/registerForm";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/home" element={<Home />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
